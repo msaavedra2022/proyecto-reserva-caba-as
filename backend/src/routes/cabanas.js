@@ -14,6 +14,17 @@ router.get('/cabanas', (req, res) => {
         });
 });
 
+//obtener una cabaña por id
+router.get('/cabanas/:id', (req, res) => {
+    Cabana.findByPk(req.params.id)
+        .then(cabana => {
+            res.json(cabana);
+        })
+        .catch(err => {
+            res.status(400).json({ error: error.message });
+        });
+});
+
 // Crear cabaña
 router.post('/cabanas', (req, res) => {
     Cabana.create(req.body)
