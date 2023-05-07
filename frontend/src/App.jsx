@@ -4,6 +4,9 @@ import './App.css'
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Footer from './components/footer';
+import Nav from './components/nav';
+//import Home from './components/home';
 
 const App = () => {
   const [cabins, setCabins] = useState([]);
