@@ -21,6 +21,16 @@ router.post('/cabanas', (req, res) => {
         .catch(error => res.status(400).json({ error: error.message }));
 });
 
+// Crear cabañas en lote (recibe un array de cabañas)
+router.post('/cabanas/bulk', (req, res) => {
+    console.log(req.body);
+    Cabana.bulkCreate(req.body)
+        .then(cabanas => res.json(cabanas))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+
+
 // Editar cabaña
 router.put('/cabanas/:id', (req, res) => {
     Cabana.update(req.body, { where: { id: req.params.id } })
