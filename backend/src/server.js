@@ -6,15 +6,13 @@ const cabañasRouter = require('./routes/cabanas');
 
 const app = express();
 
+//Middlewares
 app.use(cors( { origin: 'http://localhost:5173' }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Usar el router en la aplicación
+
 app.use('/', cabañasRouter);
-
-
-app.get('/', (req, res) => {
-  res.send('¡Hola desde Express!');
-});
 
 const port = require('dotenv').config().parsed.PORT || 3000;
 
