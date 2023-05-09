@@ -44,6 +44,10 @@ const Cabaña = sequelize.define("cabaña", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    imagen: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
     ubicacion: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -83,10 +87,10 @@ Reserva.belongsTo(Cabaña);
 sequelize
     .sync({ force: false })
     .then(() => {
-        console.log("Tablas creadas correctamente");
+        console.log("Conexión con la base de datos establecida");
     })
     .catch((error) => {
-        console.error("Error creando las tablas:", error);
+        console.error("Error al conectar con la base de datos:", error);
     });
 
 module.exports = {

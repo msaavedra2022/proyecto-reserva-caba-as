@@ -21,7 +21,7 @@ router.get('/cabanas/:id', (req, res) => {
             res.json(cabana);
         })
         .catch(err => {
-            res.status(400).json({ error: error.message });
+            res.status(400).json({ error: err.message });
         });
 });
 
@@ -48,6 +48,37 @@ router.put('/cabanas/:id', (req, res) => {
         .then(() => res.json({ message: 'Cabaña actualizada con éxito' }))
         .catch(error => res.status(400).json({ error: error.message }));
 });
+
+
+// SOLO PARA PRUEBAS
+
+//Agregar 20 cabañas
+router.get('/cabanas-add', (req, res) => {
+    console.log('Agregando cabañas');
+    let cabañas = [];
+    for (let i = 0; i < 20; i++) {
+        cabañas.push({
+            nombre: `Cabaña ${i}`,
+            ubicacion: `Ubicación ${i}`,
+            imagen: `https://picsum.photos/seed/${i}/200/300`,
+            capacidad: i,
+            precio_por_noche: i * 100,
+        });
+    }
+    Cabana.bulkCreate(cabañas)
+        .then(cabanas => res.json(cabanas))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+// Borra todas las cabañas
+router.get('/cabanas-delete', (req, res) => {
+    Cabana.destroy({ where: {} })
+        .then(() => res.json({ message: 'Cabañas borradas con éxito' }))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
+
+
+
 
 
 module.exports = router;
