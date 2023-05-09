@@ -4,9 +4,13 @@ import axios from 'axios';
 import CardCabin from '../components/CardCabin';
 
 import styles from './CabinsPage.module.css';
+import CabinForm from './CabinForm';
+
 
 export default function CabinsPage() {
     const [cabins, setCabins] = useState([]);
+    const [cabinEdit, setCabinEdit] = useState(null);
+    const [reloadFetch, setReloadFetch] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,16 +23,20 @@ export default function CabinsPage() {
             setCabins(result.data);
         };
         fetchData();
-    }, []);
+    }, [reloadFetch]);
 
-    //estilos tailwind
+    const reload = () => {
+        setReloadFetch(!reloadFetch);
+    }
+
     return (
-        <div>
+        <div className={styles.containerCabins  + ' ' +((cabinEdit!=null)?styles.scrollContent:"")} >
             <h1 className="">Cabañas</h1>
+            {cabinEdit!=null?<CabinForm cabin={cabins[cabinEdit]} setCabinEdit={setCabinEdit} reload={reload} />:null}
             <div className={styles.container}>
-            {cabins.map(cabin => (
-                <CardCabin key={cabin.id} cabin={cabin} />
-            ))}
+                {cabins.map((cabin, index) => (
+                    <CardCabin key={cabin.id} cabin={cabin} setCabinEdit={()=>setCabinEdit(index)} />
+                ))}
             </div>
         </div>
     )

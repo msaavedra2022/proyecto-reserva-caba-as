@@ -10,11 +10,11 @@ import CabinsPage from './pages/CabinsPage';
 
 const App = () => {
   return (
-    <>
+    <div className='app'>
       <Nav />
       <CabinsPage />
       <Footer />
-    </>
+    </div>
   );
 };
 

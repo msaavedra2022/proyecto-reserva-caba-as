@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import CabinForm from '../pages/CabinForm';
 
 
 /**
@@ -35,7 +36,15 @@ import React from 'react'
 //Card que muestra la cabaña
 export default function cardCabin(props) {
     const { id, nombre, imagen, ubicacion, capacidad, precio_por_noche } = props.cabin;
+    const { setCabinEdit } = props;
+
+    const handleEdit = () => {
+        setCabinEdit();
+    }
+    
+    
     return (
+
         <div className="card">
             <img src={imagen} alt={nombre} />
             <div className="card-body">
@@ -44,6 +53,7 @@ export default function cardCabin(props) {
                 <p>{capacidad} personas</p>
                 <p>${precio_por_noche}</p>
                 <button>Reservar</button>
+                <button onClick={()=>handleEdit()}>Editar</button>
             </div>
         </div>
     )
