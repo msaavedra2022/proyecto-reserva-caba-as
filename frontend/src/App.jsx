@@ -13,10 +13,14 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('http://localhost:3000/cabanas');
+      const result = await axios('http://localhost:3000/cabanas', {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        }
+      });
       setCabins(result.data);
     };
-
     fetchData();
   }, []);
 
