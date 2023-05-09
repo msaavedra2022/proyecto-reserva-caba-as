@@ -7,12 +7,23 @@ import axios from 'axios';
 import Footer from './components/Footer';
 import Nav from './components/Nav';
 import CabinsPage from './pages/CabinsPage';
+import Home from './pages/Home';
 
+//generar un pequeño router para que se pueda navegar entre las distintas páginas
 const App = () => {
+  const pages = ['Home', 'Reservas', 'Contacto'];
+
+  const [page, setPage] = useState('Home');
+
+  const setPageHandler = (page) => {
+    setPage(page);
+  };
+
   return (
     <div className='app'>
-      <Nav />
-      <CabinsPage />
+      <Nav setPage={setPageHandler}/>
+        {page ==='Reservas' && <CabinsPage />}
+        {page ==='Home' && <Home />}
       <Footer />
     </div>
   );
