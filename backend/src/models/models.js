@@ -1,8 +1,9 @@
 const Sequelize = require("sequelize");
 
-const { PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT } = require('dotenv').config().parsed;
+require('dotenv').config();
 
-console.log(PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT);
+const { PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
+
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
     host: PGHOST,
     port: PGPORT,
