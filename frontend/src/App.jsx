@@ -8,8 +8,6 @@ import Footer from './components/footer';
 import Nav from './components/nav';
 //import Home from './components/home';
 
-//import de la pagina contacto
-import contacto from "./pages/contacto"
 
 const App = () => {
   const [cabins, setCabins] = useState([]);
@@ -39,12 +37,5 @@ const App = () => {
   );
 };
 
-function App() {
-  return (
-    <div className="App">
-      <Formulario />
-    </div>
-  );
-}
-
 export default App
+
