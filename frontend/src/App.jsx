@@ -8,7 +8,6 @@ import Footer from './components/footer';
 import Nav from './components/nav';
 //import Home from './components/home';
 
-
 const App = () => {
   const [cabins, setCabins] = useState([]);
 
