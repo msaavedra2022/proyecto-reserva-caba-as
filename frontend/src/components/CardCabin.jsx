@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CabinForm from '../pages/CabinForm';
+import styles from './CardCabin.module.css';
 
 
 /**
@@ -42,12 +43,18 @@ export default function cardCabin(props) {
         setCabinEdit();
     }
     
+    const getImagen = () => {
+        if (imagen.includes('https')) {
+            return imagen;
+        }else return `http://localhost:3000/${imagen}`;
+    }
     
     return (
-
-        <div className="card">
-            <img src={imagen} alt={nombre} />
-            <div className="card-body">
+        <div className={styles.card}>
+            <div className={styles.cardContainer}>
+                <img src={getImagen()} alt={nombre} />
+            </div>
+            <div className={styles.cardBody}>
                 <h3>{nombre}</h3>
                 <p>{ubicacion}</p>
                 <p>{capacidad} personas</p>

@@ -12,6 +12,7 @@ import CabinForm from './CabinForm';
 export default function CabinsPage() {
     const [cabins, setCabins] = useState([]);
     const [cabinEdit, setCabinEdit] = useState(null);
+    const [cabinAdd, setCabinAdd] = useState(false);
     const [reloadFetch, setReloadFetch] = useState(false);
 
     useEffect(() => {
@@ -27,9 +28,15 @@ export default function CabinsPage() {
         fetchData();
     }, [reloadFetch]);
 
+
     const reload = () => {
         setReloadFetch(!reloadFetch);
     }
+
+    const handleAddCabin = () => {
+        setCabinAdd(true);
+    }
+
 
     return (
         <motion.div
@@ -39,8 +46,13 @@ export default function CabinsPage() {
             transition={{ duration: 0.5 }} 
             
             className={styles.containerCabins  + ' ' +((cabinEdit!=null)?styles.scrollContent:"")} >
-            <h1 className="">Cabañas</h1>
-            {cabinEdit!=null?<CabinForm cabin={cabins[cabinEdit]} setCabinEdit={setCabinEdit} reload={reload} />:null}
+            <div className={styles.header}>
+                <span className={styles.title}>Cabañas Pucón</span>
+                <button className={styles.button} onClick={handleAddCabin}>Agregar Cabaña</button>
+            </div>
+            {cabinEdit!=null?<CabinForm cabin={cabins[cabinEdit]} close={()=>setCabinEdit(null)} setCabinEdit={setCabinEdit} reload={reload} />:null}
+            {cabinAdd?<CabinForm edit={false} cabin={null} close={()=>setCabinAdd(false)} setCabinEdit={setCabinEdit} reload={reload} />:null}
+
             <div className={styles.container}>
                 {cabins.map((cabin, index) => (
                     <CardCabin key={cabin.id} cabin={cabin} setCabinEdit={()=>setCabinEdit(index)} />
