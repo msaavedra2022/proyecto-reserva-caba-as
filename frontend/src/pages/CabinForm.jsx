@@ -90,7 +90,7 @@ export default function CabinForm(props) {
     }
 
     const handleCreate = (data) => {
-        axios.post('${url}/cabanas', data)
+        axios.post(`${url}/cabanas`, data)
             .then(response => {
                 console.log('Success:', response.data);
                 Swal.fire('¡Cabaña creada con éxito!', '', 'success').then(() => {
