@@ -36,7 +36,7 @@ import styles from './CardCabin.module.css';
 
 //Card que muestra la cabaña
 
-const url = "https://proyecto-reserva-cabanas-production.up.railway.app"
+const url = ""
 
 
 export default function cardCabin(props) {

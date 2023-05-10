@@ -5,7 +5,7 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import styles from './CabinForm.module.css';
 
-const url = "https://proyecto-reserva-cabanas-production.up.railway.app";
+const url = "";
 
 export default function CabinForm(props) {
     const { setCabinEdit, edit = true, close, reload, add } = props;
