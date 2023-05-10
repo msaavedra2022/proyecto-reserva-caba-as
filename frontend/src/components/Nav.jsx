@@ -11,13 +11,13 @@ function Nav(props) {
   
   return (
     <nav>
-      <ul>
-        <li><a href="/home" onClick={(e) => clickHandler(e, 'Home')}>Home</a></li>
+      <ul> 
+        <li><a href="/home" onClick={(e) => clickHandler(e, 'Home')}>Inicio</a></li>
         <li><a href="/reservas" onClick={(e) => clickHandler(e, 'Reservas')}>Reservas</a></li>
-        <li><a href="/opiniones" onClick={(e) => clickHandler(e, 'Opiniones')}>Opiniones</a></li>
-        <li><a href="/preguntasfrecuentes" onClick={(e) => clickHandler(e, 'PreguntasFrecuentes')}>Preguntas Frecuentes</a></li>
+        <li><a href="/opiniones" onClick={(e) => clickHandler(e, 'Opiniones')}>Información</a></li>
+        {/*<li><a href="/preguntasfrecuentes" onClick={(e) => clickHandler(e, 'PreguntasFrecuentes')}>Preguntas Frecuentes</a></li>*/}
         <li><a href="/contacto" onClick={(e) => clickHandler(e, 'Contacto')}>Contacto</a></li>
-        <li><a href="/acerca" onClick={(e) => clickHandler(e, 'Acerca')}>Acerca</a></li>
+        <li><a href="/acerca" onClick={(e) => clickHandler(e, 'Acerca')}>Administración</a></li>
       </ul>
     </nav>
   );
