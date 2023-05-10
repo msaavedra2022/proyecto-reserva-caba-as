@@ -9,6 +9,7 @@ RUN npm run build
 # Crea la imagen del backend
 FROM node:14 as backend
 WORKDIR /app/backend
+RUN mkdir -p /app/backend/public/uploads
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
