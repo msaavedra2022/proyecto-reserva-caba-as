@@ -7,7 +7,7 @@ import styles from './CabinsPage.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import CabinForm from './CabinForm';
 
-const url = process.env.VITE_API_URL;
+const url = "https://proyecto-reserva-cabanas-production.up.railway.app";
 
 
 

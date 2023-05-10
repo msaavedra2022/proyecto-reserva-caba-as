@@ -36,7 +36,7 @@ import styles from './CardCabin.module.css';
 
 //Card que muestra la cabaña
 
-const url = process.env.VITE_API_URL;
+const url = "https://proyecto-reserva-cabanas-production.up.railway.app"
 
 
 export default function cardCabin(props) {
@@ -59,6 +59,7 @@ export default function cardCabin(props) {
                 <img src={getImagen()} alt={nombre} />
             </div>
             <div className={styles.cardBody}>
+                <p>{url}</p>
                 <h3>{nombre}</h3>
                 <p>{ubicacion}</p>
                 <p>{capacidad} personas</p>
