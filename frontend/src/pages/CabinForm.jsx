@@ -2,8 +2,9 @@ import 'animate.css/animate.min.css';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import styles from './CabinForm.module.css';
+
 
 const url = "";
 

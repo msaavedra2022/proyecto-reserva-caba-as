@@ -13,7 +13,9 @@ const app = express();
 app.use(cors( { origin: 'http://localhost:5173' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public/'));
+app.use(express.static('public/uploads'));
+app.use(express.static('public'));
+
 
 // Ruta para servir la aplicación React
 app.get('/', (req, res) => {
