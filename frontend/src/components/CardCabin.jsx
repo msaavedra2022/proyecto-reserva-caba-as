@@ -35,6 +35,10 @@ import styles from './CardCabin.module.css';
  */
 
 //Card que muestra la cabaña
+
+const url = process.env.VITE_API_URL;
+
+
 export default function cardCabin(props) {
     const { id, nombre, imagen, ubicacion, capacidad, precio_por_noche } = props.cabin;
     const { setCabinEdit } = props;
@@ -46,7 +50,7 @@ export default function cardCabin(props) {
     const getImagen = () => {
         if (imagen.includes('https')) {
             return imagen;
-        }else return `http://localhost:3000/${imagen}`;
+        }else return `${url}/${imagen}`;
     }
     
     return (

@@ -7,6 +7,8 @@ import styles from './CabinsPage.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import CabinForm from './CabinForm';
 
+const url = process.env.VITE_API_URL;
+
 
 
 export default function CabinsPage() {
@@ -17,7 +19,7 @@ export default function CabinsPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('http://localhost:3000/cabanas', {
+            const result = await axios(`${url}/cabanas`, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',

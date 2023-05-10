@@ -5,6 +5,8 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import styles from './CabinForm.module.css';
 
+const url = process.env.VITE_API_URL;
+
 export default function CabinForm(props) {
     const { setCabinEdit, edit = true, close, reload, add } = props;
     
@@ -73,7 +75,7 @@ export default function CabinForm(props) {
     }
 
     const handleEditCabin = (data) => {
-        axios.put(`http://localhost:3000/cabanas/${form.id}`, data)
+        axios.put(`${url}/cabanas/${form.id}`, data)
             .then(response => {
                 console.log('Success:', response.data);
                 Swal.fire('¡Cabaña editada con éxito!', '', 'success').then(() => {
@@ -87,7 +89,7 @@ export default function CabinForm(props) {
     }
 
     const handleCreate = (data) => {
-        axios.post('http://localhost:3000/cabanas', data)
+        axios.post('${url}/cabanas', data)
             .then(response => {
                 console.log('Success:', response.data);
                 Swal.fire('¡Cabaña creada con éxito!', '', 'success').then(() => {
