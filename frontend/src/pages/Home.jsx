@@ -13,11 +13,11 @@ function Home() {
     exit={{ scale: 0.7, opacity: 0 }}
     transition={{ duration: 0.7 }} 
     className={styles.container}>
-      <h1 className={styles.title}>Bienvenidos a Cabañas Pucón</h1>
+      <h1 className={styles.title}>Cabañas Bosque de Pucón</h1>
       <p className={styles.text}>Encuentra la cabaña perfecta para tu próxima escapada</p>
       <form className={styles.form}>
-        <label htmlFor="ubicacion">Ubicación:</label>
-        <input type="text" id="ubicacion" />
+        {/*<label htmlFor="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" />*/}
         <label htmlFor="fecha">Fecha de llegada:</label>
         <input type="date" id="fecha" />
         <label htmlFor="dias">Número de días:</label>

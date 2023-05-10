@@ -67,7 +67,7 @@ router.put('/cabanas/:id', upload.single('file'), (req, res) => {
 router.get('/cabanas-add', (req, res) => {
     console.log('Agregando cabañas');
     let cabañas = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 9; i++) {
         cabañas.push({
             nombre: `Cabaña ${i}`,
             ubicacion: `Ubicación ${i}`,
