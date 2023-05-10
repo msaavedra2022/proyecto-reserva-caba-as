@@ -1,5 +1,6 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
+
 const nodemailer = require('nodemailer');
 
 // Configuración de Nodemailer
@@ -12,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Configuración de la ruta para enviar el correo electrónico
-app.post('/send-email', (req, res) => {
+router.post('/send-email', (req, res) => {
     const { name, email, message } = req.body;
 
     // Configuración del mensaje de correo electrónico
@@ -39,5 +40,4 @@ app.post('/send-email', (req, res) => {
     });
 });
 
-// Inicio del servidor
-app.listen(3000, () => console.log('Servidor iniciado en el puerto 3000'));
+module.exports = router;

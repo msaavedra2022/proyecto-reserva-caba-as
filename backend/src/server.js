@@ -5,6 +5,7 @@ require('dotenv').config();
 
 
 const cabañasRouter = require('./routes/cabanas');
+const formRouter = require('./routes/form');
 
 
 const app = express();
@@ -23,7 +24,9 @@ app.get('/', (req, res) => {
 });
 
 
+
 //Rutas
+app.use('/', formRouter);
 app.use('/', cabañasRouter);
 
 const port = process.env.PORT || 3000;

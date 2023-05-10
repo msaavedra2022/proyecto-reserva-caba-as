@@ -7,6 +7,8 @@ import Nav from './components/Nav';
 import CabinsPage from './pages/CabinsPage';
 import Home from './pages/Home';
 
+import ContactoPage from './pages/ContactoPage';
+
 //generar un pequeño router para que se pueda navegar entre las distintas páginas
 const App = () => {
   const pages = ['Home', 'Reservas', 'Contacto'];
@@ -22,6 +24,7 @@ const App = () => {
       <Nav setPage={setPageHandler}/>
         {page ==='Reservas' && <CabinsPage />}
         {page ==='Home' && <Home />}
+        {page ==='Contacto' && <ContactoPage />}
       <Footer />
     </div>
   );

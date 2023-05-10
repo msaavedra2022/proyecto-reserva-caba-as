@@ -6,7 +6,9 @@ function Nav(props) {
 
   const clickHandler = (e, page) => {
     e.preventDefault();
-    if(page === 'Home' || page === 'Reservas') setPage(page);
+    if(page === 'Home' || page === 'Reservas' || page === 'Contacto') {
+      setPage(page);
+    }
   };
   
   return (
