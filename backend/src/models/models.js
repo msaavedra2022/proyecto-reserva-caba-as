@@ -1,8 +1,9 @@
 const Sequelize = require("sequelize");
 
-const { PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT } = require('dotenv').config().parsed;
+require('dotenv').config();
 
-console.log(PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT);
+const { PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
+
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
     host: PGHOST,
     port: PGPORT,
@@ -41,6 +42,10 @@ const Cabaña = sequelize.define("cabaña", {
         autoIncrement: true,
     },
     nombre: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    imagen: {
         type: Sequelize.STRING,
         allowNull: false,
     },
@@ -83,10 +88,10 @@ Reserva.belongsTo(Cabaña);
 sequelize
     .sync({ force: false })
     .then(() => {
-        console.log("Tablas creadas correctamente");
+        console.log("Conexión con la base de datos establecida");
     })
     .catch((error) => {
-        console.error("Error creando las tablas:", error);
+        console.error("Error al conectar con la base de datos:", error);
     });
 
 module.exports = {
