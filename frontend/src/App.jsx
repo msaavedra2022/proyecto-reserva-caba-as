@@ -8,15 +8,15 @@ import Footer from './components/footer';
 import Nav from './components/nav';
 //import Home from './components/home';
 
-/*
+
 import contacto from './pages/contacto';
-function App1() {
+
   return (
     <div className="App">
       <contacto />
     </div>
   );
-}*/
+
 
 
 const App = () => {
