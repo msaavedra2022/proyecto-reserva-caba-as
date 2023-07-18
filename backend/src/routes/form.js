@@ -1,16 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const nodemailer = require('nodemailer');
+const transporter = require('../utils/emailTransporter');
 
-// Configuración de Nodemailer
-const transporter = nodemailer.createTransport({
-    service: 'hotmail',
-    auth: {
-        user: 'cabanaspuconphp@outlook.cl',
-        pass: 'cabanasphp2023'
-    }
-});
 
 // Configuración de la ruta para enviar el correo electrónico
 router.post('/send-email', (req, res) => {

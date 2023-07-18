@@ -1,0 +1,60 @@
+.calendar {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    margin: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #ddd;
+    height: 100px;
+}
+
+
+.body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day,
+.dayName,
+.emptyDay,
+.markedDay,
+.today {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    border: 1px solid #ddd;
+}
+
+.dayName {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.day {
+    background-color: #fff;
+}
+
+.emptyDay {
+    background-color: #f8f8f8;
+}
+
+.markedDay {
+    background-color: #ccc;
+}
+
+.today {
+    background-color: #ff0;
+}
+
+.btnDay {
+    cursor: pointer;
+}
+
+

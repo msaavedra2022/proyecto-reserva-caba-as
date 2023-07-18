@@ -7,7 +7,7 @@ import styles from './CabinsPage.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import CabinForm from './CabinForm';
 
-const url = "";
+const url = import.meta.env.VITE_API_URL;
 
 
 
@@ -16,6 +16,7 @@ export default function CabinsPage() {
     const [cabinEdit, setCabinEdit] = useState(null);
     const [cabinAdd, setCabinAdd] = useState(false);
     const [reloadFetch, setReloadFetch] = useState(false);
+    
 
     useEffect(() => {
         const fetchData = async () => {

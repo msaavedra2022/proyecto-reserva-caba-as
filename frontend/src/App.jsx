@@ -1,34 +1,57 @@
-import './App.css'
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import './App.css';
+import React from 'react';
+import { createBrowserRouter, RouterProvider, useLoaderData } from 'react-router-dom';
 import Footer from './components/Footer';
 import Nav from './components/Nav';
-import CabinsPage from './pages/CabinsPage';
 import Home from './pages/Home';
-
+import Login from './pages/Login';
+import Register from './pages/Register';
+import CabinsPage from './pages/CabinsPage';
 import ContactoPage from './pages/ContactoPage';
 
-//generar un pequeño router para que se pueda navegar entre las distintas páginas
-const App = () => {
-  const pages = ['Home', 'Reservas', 'Contacto'];
+import { BrowserRouter } from 'react-router-dom'
 
-  const [page, setPage] = useState('Home');
 
-  const setPageHandler = (page) => {
-    setPage(page);
-  };
+        
+// Configuración del nuevo router personalizado
+let router = createBrowserRouter([
+  {
+    path: '/login',
+    Component: Login,
+  },
+  {
+    path: '/register',
+    Component: Register,
+  },
+  {
+    path: '/',
+    Component: Home,
+  },
+  {
+    path: '/reservas',
+    Component: CabinsPage,
+  },
+  {
+    path: '/contacto',
+    Component: ContactoPage,
+  },
+  // Redirección a /login si la ruta no coincide con ninguna definida
+  {
+    path: '(.*)',
+    redirect: '/login',
+  },
+]);
 
+export default function App() {
   return (
     <div className='app'>
-      <Nav setPage={setPageHandler}/>
-        {page ==='Reservas' && <CabinsPage />}
-        {page ==='Home' && <Home />}
-        {page ==='Contacto' && <ContactoPage />}
+      <Nav />
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
       <Footer />
     </div>
   );
-};
+}
 
-
-export default App
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => router.dispose());
+}

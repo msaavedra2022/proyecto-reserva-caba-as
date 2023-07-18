@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
 
+
+
 require('dotenv').config();
 
 const { PGUSER, PGHOST, PGDATABASE, PGPASSWORD, PGPORT } = process.env;
@@ -9,6 +11,8 @@ const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
     port: PGPORT,
     dialect: "postgres"
 });
+
+sequelize.sync({ alter: true }) //TODO: Solo para desarrollo, borrar en producción
 
 const Usuario = sequelize.define("usuario", {
     id: {
@@ -29,11 +33,25 @@ const Usuario = sequelize.define("usuario", {
         allowNull: false,
         unique: true,
     },
-    contrasena: {
+    celular: {
         type: Sequelize.STRING,
         allowNull: false,
     },
 });
+
+
+const User = sequelize.define('User', {
+    username: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+});
+
 
 const Cabaña = sequelize.define("cabaña", {
     id: {
@@ -47,6 +65,10 @@ const Cabaña = sequelize.define("cabaña", {
     },
     imagen: {
         type: Sequelize.STRING,
+        allowNull: false,
+    },
+    imagenes: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
     },
     ubicacion: {
@@ -68,6 +90,11 @@ const Reserva = sequelize.define("reserva", {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+    },
+    isConfirmed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
     },
     fecha_inicio: {
         type: Sequelize.DATE,
@@ -98,4 +125,5 @@ module.exports = {
     Usuario,
     Cabaña,
     Reserva,
+    User
 };
