@@ -22,7 +22,7 @@ Correo electrónico: cabañaspucos@gmail.com
 `;
 
 //obtener url del backend
-const url = process.env.URL || '';
+const url = "https://proyecto-reserva-cabanas-production-a736.up.railway.app"
 
 // Obtener todas las cabañas que no tienen reservas confirmadas entre dos fechas
 router.post('/cabanas/disponibles', (req, res) => {
@@ -127,7 +127,7 @@ Para confirmar tu reserva debes realizar un depósito de $${valor} a la siguient
 ${datosReserva}
 
 Cuando realice el deposito de click en el siguiente link para enviar el comprobante su reserva:\n\n
-${url}/confirmar-reserva?id_reserva=${reserva.id}\n\n
+${url}/comprobante?id_reserva=${reserva.id}\n\n
                         `
                     };
 
@@ -142,7 +142,7 @@ ${url}/confirmar-reserva?id_reserva=${reserva.id}\n\n
                             // Configuración del mensaje de correo electrónico
                             const mailOptionsAdmin = {
                                 from: admin_correo,
-                                to: "miguelsaavedra9816@gmail.com",
+                                to: "miguel12y4@gmail.com",
                                 subject: 'Nueva reserva Cabañas Pucón',
                                 text: `Hola administrador,\n\n
 
