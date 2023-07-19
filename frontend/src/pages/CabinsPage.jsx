@@ -7,7 +7,8 @@ import styles from './CabinsPage.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import CabinForm from './CabinForm';
 
-const url = import.meta.env.VITE_API_URL;
+// const url = import.meta.env.VITE_API_URL;
+const url = "";
 
 
 

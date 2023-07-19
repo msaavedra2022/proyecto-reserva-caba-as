@@ -6,7 +6,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import styles from './CabinForm.module.css';
 
 
-const url = import.meta.env.VITE_API_URL;
+// const url = import.meta.env.VITE_API_URL;
+const url = "";
 
 
 export default function CabinForm(props) {

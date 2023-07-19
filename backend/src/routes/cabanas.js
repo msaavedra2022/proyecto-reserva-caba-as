@@ -22,7 +22,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const correo_admin = "your-email@gmail.com";
+const correo_admin = 'cabanaspuconphp@outlook.cl';
+
 
 //El usuario debe subir el comprobante de pago de la reserva realizada previamente
 router.post('/upload-comprobante', upload.single('file'), (req, res) => {
@@ -48,18 +49,18 @@ router.post('/upload-comprobante', upload.single('file'), (req, res) => {
         ]
     };
 
-    // transporter.sendMail(mailOptions, function (error, info) {
-    //     if (error) {
-    //         console.log(error);
-    //         res.sendStatus(500);
-    //     } else {
-    //         console.log('Email sent: ' + info.response);
-    //         fs.unlinkSync(filePath); // delete file after sending
-    //         res.sendStatus(200);
-    //     }
-    // });
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(500);
+        } else {
+            console.log('Email sent: ' + info.response);
+            fs.unlinkSync(filePath); // delete file after sending
+            res.sendStatus(200);
+        }
+    });
     //TODO: enviar email al usuario con el comprobante de pago
-    res.sendStatus(200);
+    // res.sendStatus(200);
 });
 
 
