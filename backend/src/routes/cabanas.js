@@ -42,11 +42,12 @@ router.post('/upload-comprobante', upload.single('file'), (req, res) => {
         to: email,
         subject: 'Comprobante de reserva',
         text: `Hola, el usuario ${reserva.nombre}, con email ${reserva.email} ha subido el comprobante de pago de la reserva ${reserva.id}`,
-        attachments: [
-            {
-                path: filePath
-            }
-        ]
+        html: '<img src="cid:unique@kreata.ee"/>',
+        attachments: [{
+            filename: 'image',
+            path: filePath,
+            cid: 'unique@kreata.ee' //same cid value as in the html img src
+        }]
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
