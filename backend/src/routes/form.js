@@ -7,11 +7,10 @@ const transporter = require('../utils/emailTransporter');
 // Configuración de la ruta para enviar el correo electrónico
 router.post('/send-email', (req, res) => {
     const { name, email, message } = req.body;
-
     // Configuración del mensaje de correo electrónico
     const mailOptions = {
-        from: 'cabanaspuconphp@outlook.cl',
-        to: 'vicente.iturrieta1901@alumnos.ubiobio.cl',
+        from: 'miguel.saavedra1601@alumnos.ubiobio.cl',
+        to: 'miguel12y4@gmail.com',
         subject: 'Nuevo mensaje de bosque de pucón',
         text: `
             Nombre: ${name}\n

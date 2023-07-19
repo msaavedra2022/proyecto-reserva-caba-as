@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    service: 'gmail',
     auth: {
-        user: 'cabanaspuconphp@outlook.cl',
-        pass: 'cabanasphp2023'
+        // user: 'cabanaspuconphp@outlook.cl',
+        user: 'miguel.saavedra1601@alumnos.ubiobio.cl',
+        pass: '4#d#5Ce2-3'
     }
 });
 

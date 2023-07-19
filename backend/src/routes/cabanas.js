@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const correo_admin = 'cabanaspuconphp@outlook.cl';
+const correo_admin = 'miguel.saavedra1601@alumnos.ubiobio.cl';
 
 
 //El usuario debe subir el comprobante de pago de la reserva realizada previamente
