@@ -1,0 +1,49 @@
+/* UnconfirmedReservations.module.css */
+.container {
+    width: 90%;
+    padding: 20px;
+    margin: auto;
+    font-family: 'Roboto', sans-serif;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b86e5;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #36d1dc;
+}

@@ -47,7 +47,7 @@ let router = createBrowserRouter([
     Component: Comprobante,
   },
   {
-    path: '/confirmar-reserva',
+    path: '/acerca',
     Component: UnconfirmedReservations,
   }
 ]);
@@ -55,6 +55,7 @@ let router = createBrowserRouter([
 export default function App() {
   //Busca el token en el local storage, si no lo encuentra lo redirige a login
   const token = localStorage.getItem('token');
+  console.log(window.location.pathname);
   if (!token && window.location.pathname == '/admin') {
     router.navigate('/login');
   }
@@ -63,9 +64,10 @@ export default function App() {
 
   return (
     <div className='app'>
-      <Nav />
+      {/* Si la ruta es login, ocultar el nav */}
+      {(window.location.pathname !== '/login' && window.location.pathname !== '/register') ? <Nav /> : null}
       <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
-      <Footer />
+      {(window.location.pathname !== '/login' && window.location.pathname !== '/register') ? <Footer /> : null}
     </div>
   );
 }

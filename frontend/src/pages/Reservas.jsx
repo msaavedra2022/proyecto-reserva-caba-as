@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
+import styles from './UnconfirmedReservations.module.css'; // Import the styles
 
 
 const url = import.meta.env.VITE_API_URL;
@@ -9,7 +10,7 @@ const UnconfirmedReservations = () => {
     const [reservations, setReservations] = useState([]);
 
     useEffect(() => {
-        axios.get(url+'/reservasNoConfirmadas')
+        axios.get(url + '/reservasNoConfirmadas')
             .then(res => {
                 setReservations(res.data);
             })
@@ -30,12 +31,12 @@ const UnconfirmedReservations = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 console.log("Enviando confirmación de reserva...");
-                axios.put(url+`/cabanas/${idCabana}/reservas/${idReserva}`)
+                axios.put(url + `/cabanas/${idCabana}/reservas/${idReserva}`)
                     .then(res => {
                         // after successful confirmation, refresh the reservations list
                         // or just update the state to remove the confirmed reservation
                         console.log(res);
-                        axios.get(url+'/reservasNoConfirmadas')
+                        axios.get(url + '/reservasNoConfirmadas')
                             .then(res => {
                                 setReservations(res.data);
                             })
@@ -46,7 +47,7 @@ const UnconfirmedReservations = () => {
                     .catch(err => {
                         console.log(err);
                     });
-                }
+            }
         });
     };
 
@@ -54,15 +55,15 @@ const UnconfirmedReservations = () => {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0 based
         const year = date.getFullYear();
-    
+
         return `${day}-${month}-${year}`;
     }
-    
+
 
     return (
-        <div>
-            <h1>Reservas No Confirmadas</h1>
-            <table>
+        <div className={styles.container}>
+            <h1 className={styles.title}>Reservas No Confirmadas</h1>
+            <table className={styles.table}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -87,7 +88,7 @@ const UnconfirmedReservations = () => {
                             <td>{formatDate(new Date(reservation.fecha_fin))}</td>
                             <td>{reservation.cantidad_personas}</td>
                             <td>
-                                <button onClick={() => confirmReservation(reservation.cabañaId, reservation.id)}>
+                                <button onClick={() => confirmReservation(reservation.cabañaId, reservation.id)} className={styles.button}>
                                     Confirmar
                                 </button>
                             </td>

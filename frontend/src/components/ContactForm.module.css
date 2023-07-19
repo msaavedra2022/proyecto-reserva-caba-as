@@ -1,45 +1,59 @@
+/* ContactForm.module.css */
+
 .form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     margin: 0 auto;
     padding: 2rem;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 14px 28px rgba(0, 0, 0, 0.25);
+    background: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-container:hover {
+    transform: scale(1.02);
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+    transition: color 0.3s;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    padding: 0.8rem;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    font-size: 1.1em;
+    transition: border-color 0.3s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #5d5dff;
+    border-color: #5b86e5;
 }
 
 .form-group textarea {
     resize: vertical;
-    min-height: 100px;
-}
-
-.form-group p {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #dc143c;
+    min-height: 150px;
 }
 
 .form-group.success input,
@@ -67,5 +81,38 @@
 }
 
 .form-group.error p {
+    color: #dc143c;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b86e5;
+    color: #ffffff;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #36d1dc;
+}
+
+.message {
+    margin-top: 1rem;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    transition: color 0.3s;
+}
+
+.message.success {
+    color: #008000;
+}
+
+.message.error {
     color: #dc143c;
 }

@@ -20,6 +20,50 @@ Correo electrónico: cabañaspucos@gmail.com
 
 `;
 
+//obtener url del backend
+const url = process.env.URL || '';
+
+// Obtener todas las cabañas que no tienen reservas confirmadas entre dos fechas
+router.post('/cabanas/disponibles', (req, res) => {
+    const fechaInicio = req.body.fechaInicio;
+    const fechaFin = req.body.fechaFin;
+
+    if (!fechaInicio || !fechaFin) {
+        return res.status(400).json({ error: 'Se deben proporcionar la fecha de inicio y la fecha de fin' });
+    }
+
+    Cabana.findAll({
+        include: {
+            model: Reserva,
+            where: {
+                [Sequelize.Op.or]: [
+                    { isConfirmed: false },
+                    {
+                        [Sequelize.Op.or]: [
+                            {
+                                fecha_inicio: {
+                                    [Sequelize.Op.lt]: fechaInicio
+                                }
+                            },
+                            {
+                                fecha_fin: {
+                                    [Sequelize.Op.gt]: fechaFin
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            required: false
+        }
+    }).then(cabanas => {
+        res.json(cabanas);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send(err);
+    });
+});
+
 
 // Obtener reservas de una cabaña (confirmadas)
 router.get('/cabanas/:id/reservasConfirmadas', (req, res) => {
@@ -55,7 +99,7 @@ router.get('/reservasNoConfirmadas', (req, res) => {
 
 
 
-const admin_correo = 'cabañas@algo.com';
+const admin_correo = 'cabanaspuconphp@outlook.cl';
 
 // Crear reserva (no confirmada)
 router.post('/cabanas/:id/reservas', (req, res) => {
@@ -88,47 +132,47 @@ router.post('/cabanas/:id/reservas', (req, res) => {
                     };
 
                     // Envío del correo electrónico
-                    // transporter.sendMail(mailOptions, (error, info) => {
-                    //     if (error) {
-                    //         console.log(error);
-                    //         res.send('Error');
-                    //     } else {
-                    //         console.log('Correo electrónico enviado: ' + info.response);
-                    //         //Enviar email al admin
-                    //         // Configuración del mensaje de correo electrónico
-                    //         const mailOptionsAdmin = {
-                    //             from:'cabanaspuconphp@outlook.cl',
-                    //             to: admin_correo,
-                    //             subject: 'Nueva reserva Cabañas Pucón',
-                    //             text: `Hola administrador,\n\n
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                            res.send('Error');
+                        } else {
+                            console.log('Correo electrónico enviado: ' + info.response);
+                            //Enviar email al admin
+                            // Configuración del mensaje de correo electrónico
+                            const mailOptionsAdmin = {
+                                from:'cabanaspuconphp@outlook.cl',
+                                to: admin_correo,
+                                subject: 'Nueva reserva Cabañas Pucón',
+                                text: `Hola administrador,\n\n
         
-                    //             Se ha realizado una nueva reserva en la cabaña ${cabana.nombre}.\n\n
-                    //             Datos de la reserva:\n\n
-                    //             Nombre: ${req.body.nombre}\n\n
-                    //             Apellido: ${req.body.apellido}\n\n
-                    //             Email: ${req.body.email}\n\n
-                    //             Celular: ${req.body.celular}\n\n
-                    //             Fecha de inicio: ${req.body.fecha_inicio}\n\n
-                    //             Fecha de término: ${req.body.fecha_fin}\n\n
-                    //             Cantidad de personas: ${req.body.cantidad_personas}\n\n
-                    //             Valor: $${valor}\n\n
-                    //             `
-                    //         };
+                                Se ha realizado una nueva reserva en la cabaña ${cabana.nombre}.\n\n
+                                Datos de la reserva:\n\n
+                                Nombre: ${req.body.nombre}\n\n
+                                Apellido: ${req.body.apellido}\n\n
+                                Email: ${req.body.email}\n\n
+                                Celular: ${req.body.celular}\n\n
+                                Fecha de inicio: ${req.body.fecha_inicio}\n\n
+                                Fecha de término: ${req.body.fecha_fin}\n\n
+                                Cantidad de personas: ${req.body.cantidad_personas}\n\n
+                                Valor: $${valor}\n\n
+                                `
+                            };
                             
-                    //         // Envío del correo electrónico
-                    //         // transporter.sendMail(mailOptionsAdmin, (error, info) => {
-                    //         //     if (error) {
-                    //         //         console.log(error);
-                    //         //         res.send('Error');
-                    //         //     } else {
-                    //         //         console.log('Correo electrónico enviado: ' + info.response);
-                    //         //         res.json(reserva);;
-                    //         //     }
-                    //         // });
-                    //     }
-                    // });
+                            // Envío del correo electrónico
+                            transporter.sendMail(mailOptionsAdmin, (error, info) => {
+                                if (error) {
+                                    console.log(error);
+                                    res.send('Error');
+                                } else {
+                                    console.log('Correo electrónico enviado: ' + info.response);
+                                    res.json(reserva);;
+                                }
+                            });
+                        }
+                    });
                     //TODO: Enviar email al admin
-                    res.json(reserva);
+                    // res.json(reserva);
                 })
                 .catch(err =>{
                     console.log(err);
@@ -164,17 +208,17 @@ router.put('/cabanas/:id/reservas/:idReserva', (req, res) => {
                             };
 
                             // Envío del correo electrónico
-                            // transporter.sendMail(mailOptions, (error, info) => {
-                            //     if (error) {
-                            //         console.log(error);
-                            //         res.send('Error');
-                            //     } else {
-                            //         console.log('Correo electrónico enviado: ' + info.response);
-                            //     }
-                            // });
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log(error);
+                                    res.send('Error');
+                                } else {
+                                    console.log('Correo electrónico enviado: ' + info.response);
+                                }
+                            });
                             //TODO: Enviar email al admin
 
-                            res.json(reserva);
+                            // res.json(reserva);
                         })
                         .catch(err => res.status(400).json({ error: err.message }));
                 })

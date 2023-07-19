@@ -1,8 +1,9 @@
 // Login.js
 import React, { useState } from 'react';
+import styles from './Login.module.css';
 
-const server = 'http://localhost:3000';
 
+const server = import.meta.env.VITE_API_URL;
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +12,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(server+'/login', {
+      const response = await fetch(server + '/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,24 +39,30 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className={styles.container}>
+    <div className={styles.card}>
+      <h2 className={styles.title}>Bienvenido</h2>
+      <p className={styles.description}>Inicia sesión para continuar</p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Nombre de usuario"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          className={styles.input}
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
         />
-        <button type="submit">Login</button>
+        <button type="submit" className={styles.button}>Iniciar sesión</button>
       </form>
+      <a href="/register" className={styles.signUp}>No tienes cuenta? Registrate</a>
     </div>
+  </div>
   );
 };
 
