@@ -32,10 +32,16 @@ app.use(
 );
 
 
-// Ruta para servir la aplicación React
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
+// Ruta para servir la aplicación React con rutas: '/', '/login','/register', '/reservas','/contacto', '/comprobante','/confirmar-reserva'
+const routes_frontend = ['/','/login','/register', '/reservas','/contacto', '/comprobante','/confirmar-reserva'];
+for (const route of routes_frontend) {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+  });
+}
+
+
+
 
 
 
