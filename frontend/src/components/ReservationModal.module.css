@@ -27,7 +27,9 @@
     border-radius: 10px;
     width: 80%;
     max-width: 800px;
-    height: 600px;
+    overflow-y: auto;
+    max-height: 100vh;
+    box-sizing: border-box; 
 }
 
 .formReservation{

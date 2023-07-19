@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CabinForm from '../pages/CabinForm';
 import styles from './CardCabin.module.css';
 
 import ReservationModal from './ReservationModal';
+
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 
 /**
@@ -63,7 +65,7 @@ export default function cardCabin(props) {
             }
         });
     }
-    const handleReserve = async (cabinId, startDate, endDate) => {
+    const handleReserve = async (cabinId, obj) => {
         try {
             // Realizar la petición a la API para crear la reserva
             const response = await fetch(`${url}/cabanas/${cabinId}/reservas`, {
@@ -71,18 +73,19 @@ export default function cardCabin(props) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    fecha_inicio: startDate,
-                    fecha_fin: endDate,
-                    isConfirmed: false,
-                    // Otros datos de la reserva, si es necesario
-                })
+                body: JSON.stringify(obj)
             });
 
             if (response.ok) {
                 // La reserva se creó correctamente
                 setReservationModalOpen(false);
                 // Realizar cualquier otra acción necesaria después de la reserva
+                Swal.fire({
+                    title: '¡Reserva creada!',
+                    text: 'Te enviaremos un correo con los detalles del pago',
+                    icon: 'success',
+                });
+
             } else {
                 // Hubo un error al crear la reserva
                 console.error('Error al crear la reserva');

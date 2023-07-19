@@ -104,6 +104,22 @@ const Reserva = sequelize.define("reserva", {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    nombre: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    celular: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    cantidad_personas: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+    },
 });
 
 Usuario.hasMany(Reserva);

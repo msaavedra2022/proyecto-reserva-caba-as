@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ReservationModal.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -7,61 +7,109 @@ import Calendar from './Calendar';
 
 function ReservationModal({ onClose, onReserve, cabin }) {
 
+    //inavilitar scroll del body si esta este modal abierto
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, []);
+
     const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [days, setDays] = useState(0);
+
+    const [nombre, setNombre] = useState('');
+    const [email, setEmail] = useState('');
+    const [celular, setCelular] = useState('');
+    const [cantidadPersonas, setCantidadPersonas] = useState(0);
 
     const reservas = cabin.reservas;
 
+    useEffect(() => {
+        console.log('reservas', reservas);
+    }, [reservas]);
+
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        onReserve(cabin.id, startDate, endDate);
+        //sumar dias a la fecha de inicio
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + parseInt(days));
+
+        const obj = {
+            fecha_inicio: startDate,
+            fecha_fin: endDate,
+            cabañaId: cabin.id,
+            nombre: nombre,
+            email: email,
+            celular: celular,
+            cantidad_personas: parseInt(cantidadPersonas)
+        };
+
+
+        onReserve(cabin.id, obj);
     };
 
     const handleStartDateChange = (event) => {
+        console.log(event.target.value);
         const dateStart = new Date(event.target.value);
-        if(endDate == '' || new Date(endDate) < dateStart){
-            setEndDate(event.target.value);
-        }
-
-        setStartDate(event.target.value);
+        setStartDate(dateStart);
     };
 
-    const handleEndDateChange = (event) => {
-        if(new Date(event.target.value) < new Date(startDate)){
-            setStartDate(event.target.value);
-        }
-
-        setEndDate(event.target.value);
+    const handleDaysChange = (event) => {
+        console.log(event.target.value);
+        setDays(event.target.value);
     };
+
 
     return (
         <AnimatePresence>
-        <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.7, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className={styles.modal}>
-            <div className={styles.modalContent}>
-                <button className={styles.closeModal} onClick={onClose}>X</button>
-                <h2 style={{paddingBottom: '1rem'}}>Reservar {cabin.nombre}</h2>
-                <form onSubmit={handleSubmit}>
-                    <Calendar setStartDate={setStartDate} setEndDate={setEndDate} />
-                    <div className={styles.formReservation}>
-                        <label>
-                            Fecha de inicio&nbsp;:&nbsp;&nbsp;
-                            <span>{startDate}</span>
-                        </label>
-                        <label>
-                            Fecha de fin&nbsp;:&nbsp;&nbsp;
-                            <span>{endDate}</span>
-                        </label>
-                        <button type="submit">Reservar</button>
-                        <button onClick={onClose}>Cancelar</button>
+            <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.7, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={styles.modal}>
+                <div className={styles.modalContent} style={{ maxWidth: '400px', padding: '4rem' }}>
+                    <button className={styles.closeModal} onClick={onClose}>X</button>
+                    <h2 style={{ paddingBottom: '1rem' }}>Reservar {cabin.nombre}</h2>
+                    {/* <form className={styles.form} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} onSubmit={handleSubmit}>
+                    <label htmlFor="fecha">Fecha de llegada:</label>
+                    <br/>
+                    <input style={{maxWidth: '300px'}} type="date" id="fecha" onChange={handleStartDateChange} />
+                    <label htmlFor="dias">Número de días:</label>
+                    <br/>
+                    <input style={{maxWidth: '200px'}} type="number" id="dias" min="1" max="30" onChange={handleDaysChange} />
+                    <button>Reservar</button>
+                </form> */}
+                    <div>
+                        <h2>Ingrese sus datos para realizar la reserva</h2>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            <label htmlFor="nombre">Nombre:</label>
+                            <br />
+                            <input type="text" id="nombre" onChange={(e) => setNombre(e.target.value)} />
+                            <label htmlFor="correo">Correo electrónico:</label>
+                            <br />
+                            <input type="email" id="correo" onChange={(e) => setEmail(e.target.value)} />
+                            <label htmlFor="telefono">Teléfono:</label>
+                            <br />
+                            <input type="tel" id="telefono" onChange={(e) => setCelular(e.target.value)} />
+                            <label htmlFor="fecha">Fecha de llegada:</label>
+                            <br />
+                            <input type="date" id="fecha" onChange={handleStartDateChange} />
+                            <label htmlFor="dias">Número de días:</label>
+                            <br />
+                            <input type="number" id="dias" onChange={handleDaysChange} />
+                            <br />
+                            <label htmlFor="cantidad">Cantidad de personas:</label>
+                            <br />
+                            <input type="number" id="cantidad" onChange={(e) => setCantidadPersonas(e.target.value)} />
+                            <button type="submit">Reservar</button>
+                            <button type="button" onClick={onClose}>Cancelar</button>
+                        </form>
                     </div>
-                </form>
-            </div>
-        </motion.div>
+                </div>
+            </motion.div>
         </AnimatePresence>
     );
 }

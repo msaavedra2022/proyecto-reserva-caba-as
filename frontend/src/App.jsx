@@ -10,6 +10,8 @@ import CabinsPage from './pages/CabinsPage';
 import ContactoPage from './pages/ContactoPage';
 
 import { BrowserRouter } from 'react-router-dom'
+import Comprobante from './pages/Comprobante';
+import UnconfirmedReservations from './pages/Reservas';
 
 
         
@@ -38,11 +40,27 @@ let router = createBrowserRouter([
   // Redirección a /login si la ruta no coincide con ninguna definida
   {
     path: '(.*)',
-    redirect: '/login',
+    redirect: '/',
   },
+  {
+    path: '/comprobante',
+    Component: Comprobante,
+  },
+  {
+    path: '/confirmar-reserva',
+    Component: UnconfirmedReservations,
+  }
 ]);
 
 export default function App() {
+  //Busca el token en el local storage, si no lo encuentra lo redirige a login
+  const token = localStorage.getItem('token');
+  if (!token && window.location.pathname == '/admin') {
+    router.navigate('/login');
+  }
+  
+
+
   return (
     <div className='app'>
       <Nav />

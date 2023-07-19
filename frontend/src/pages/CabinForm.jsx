@@ -1,17 +1,26 @@
 import 'animate.css/animate.min.css';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import styles from './CabinForm.module.css';
 
 
-const url = "";
+const url = import.meta.env.VITE_API_URL;
+
 
 export default function CabinForm(props) {
     const { setCabinEdit, edit = true, close, reload, add } = props;
     
     let id, nombre, imagen, ubicacion, capacidad, precio_por_noche;
+
+    //inavilitar scroll del body si esta este modal abierto
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        }
+    }, []);
 
     if (edit) {
         id = props.cabin.id;

@@ -24,6 +24,10 @@ const Login = () => {
       if (response.ok) {
         // Handle successful login
         console.log(data.message);
+        //Guardar el token en el local storage
+        localStorage.setItem('token', data.token);
+        // Redirigir a la página de inicio 
+        window.location.href = '/';
       } else {
         // Handle login error
         console.error(data.message);

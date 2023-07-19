@@ -1,9 +1,13 @@
 const express = require('express');
+const path = require('path');
+
 const router = express.Router();
 const multer = require('multer');
 
 const Cabana = require('../models/models').Cabaña;
 const Reserva = require('../models/models').Reserva;
+
+const transporter = require('../utils/emailTransporter');
 
 
 const storage = multer.diskStorage({
@@ -18,6 +22,45 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
+const correo_admin = "your-email@gmail.com";
+
+//El usuario debe subir el comprobante de pago de la reserva realizada previamente
+router.post('/upload-comprobante', upload.single('file'), (req, res) => {
+    const file = req.file;
+    const filePath = file.path;
+    console.log(req.body);
+    //recibir del body el id de la reserva
+    const reservaId = req.body.reservaId;
+    
+    //obtener la reserva
+    const reserva = Reserva.findByPk(reservaId);
+    const email = reserva.email;
+
+    let mailOptions = {
+        from: correo_admin,
+        to: email,
+        subject: 'Comprobante de reserva',
+        text: `Hola, el usuario ${reserva.nombre}, con email ${reserva.email} ha subido el comprobante de pago de la reserva ${reserva.id}`,
+        attachments: [
+            {
+                path: filePath
+            }
+        ]
+    };
+
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //         console.log(error);
+    //         res.sendStatus(500);
+    //     } else {
+    //         console.log('Email sent: ' + info.response);
+    //         fs.unlinkSync(filePath); // delete file after sending
+    //         res.sendStatus(200);
+    //     }
+    // });
+    //TODO: enviar email al usuario con el comprobante de pago
+    res.sendStatus(200);
+});
 
 
 // Obtener todas las cabañas con sus reservas
@@ -98,17 +141,18 @@ router.get('/cabanas-add', async (req, res) => {
             cabanas.push({
                 nombre: `Cabaña ${i + 1}`,
                 imagen: `https://picsum.photos/seed/${i}/200/300`,
-                imagenes: [`https://picsum.photos/seed/${i}/200/300`, `https://picsum.photos/seed/${i+100}/200/300`],
+                imagenes: [`https://picsum.photos/seed/${i}/200/300`, `https://picsum.photos/seed/${i + 100}/200/300`],
                 ubicacion: 'Bariloche',
                 capacidad: 4,
                 precio_por_noche: 1000,
             });
         }
+        console.log("hasta aqui todo bien\n\n\n");
         await Cabana.bulkCreate(cabanas);
 
         // Obtener todas las cabañas
         const todasCabanas = await Cabana.findAll();
-
+        console.log("hasta aqui todo bien2\n\n\n");
         // Crear reservas para cada cabaña
         const reservaPromises = todasCabanas.map(cabana => {
             return Reserva.create({
@@ -123,6 +167,7 @@ router.get('/cabanas-add', async (req, res) => {
 
         res.json({ message: 'Cabañas agregadas con éxito' });
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
