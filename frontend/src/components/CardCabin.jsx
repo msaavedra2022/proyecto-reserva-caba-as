@@ -40,7 +40,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 //Card que muestra la cabaña
 
-const url = "";
+const url = import.meta.env.VITE_API_URL;
+// const url = "";
 
 
 export default function cardCabin(props) {
@@ -50,7 +51,14 @@ export default function cardCabin(props) {
     const [activeImage, setActiveImage] = useState(0);
 
     const [isReservationModalOpen, setReservationModalOpen] = useState(false);
+    const [isLogged, setIsLogged] = React.useState(false);
 
+    React.useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLogged(true);
+        }
+    }, []);
 
     const handleEdit = () => {
         setCabinEdit();
@@ -124,7 +132,7 @@ export default function cardCabin(props) {
                     <p>{capacidad} personas</p>
                     <p>${precio_por_noche}</p>
                     <button onClick={() => setReservationModalOpen(true)}>Reservar</button>
-                    <button onClick={()=>handleEdit()}>Editar</button>
+                    {isLogged ? <button onClick={handleEdit}>Editar</button> : null}
                 </div>
             </div>
             {isReservationModalOpen && (

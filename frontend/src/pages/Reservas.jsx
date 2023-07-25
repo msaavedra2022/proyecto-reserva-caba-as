@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../axios';
+
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import styles from './UnconfirmedReservations.module.css'; // Import the styles
 
 
-// const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = import.meta.env.VITE_API_URL;
+// const url = "";
 
 const UnconfirmedReservations = () => {
     const [reservations, setReservations] = useState([]);
+
+    React.useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+    }, []);
 
     useEffect(() => {
         axios.get(url + '/reservasNoConfirmadas')
@@ -37,6 +46,40 @@ const UnconfirmedReservations = () => {
                         // after successful confirmation, refresh the reservations list
                         // or just update the state to remove the confirmed reservation
                         console.log(res);
+                        setReservations(reservas => reservas.filter(reserva => reserva.id !== idReserva));
+                        Swal.fire({
+                            title: "¡Reserva confirmada!",
+                            text: "La reserva ha sido confirmada exitosamente",
+                            icon: "success",
+                            confirmButtonText: "Aceptar",
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        });
+    };
+
+    const eliminarReserva = (idCabana, idReserva) => {
+        //con aceptar y cancelar
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminada la reserva, no se podrá deshacer la acción",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Enviando eliminación de reserva...");
+                axios.delete(url + `/cabanas/${idCabana}/reservas/${idReserva}`)
+                    .then(res => {
+                        // after successful confirmation, refresh the reservations list
+                        setReservations(reservations.filter(reservation => reservation.id !== idReserva));
+
+                        // or just update the state to remove the confirmed reservation
+                        console.log(res);
                         axios.get(url + '/reservasNoConfirmadas')
                             .then(res => {
                                 setReservations(res.data);
@@ -51,6 +94,7 @@ const UnconfirmedReservations = () => {
             }
         });
     };
+
 
     function formatDate(date) {
         const day = String(date.getDate()).padStart(2, '0');
@@ -73,8 +117,8 @@ const UnconfirmedReservations = () => {
                         <th>Celular</th>
                         <th>Fecha inicio</th>
                         <th>Fecha fin</th>
-                        <th>Cantidad de personas</th>
-                        <th>Confirmar</th>
+                        <th>Comprobate de pago</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,10 +131,13 @@ const UnconfirmedReservations = () => {
                             {/* Solo con fecha y sin hora DD-MM-AAAA */}
                             <td>{formatDate(new Date(reservation.fecha_inicio))}</td>
                             <td>{formatDate(new Date(reservation.fecha_fin))}</td>
-                            <td>{reservation.cantidad_personas}</td>
+                            <td>{reservation.isUploadedComprobante ? 'Sí' : 'No'}</td>
                             <td>
                                 <button onClick={() => confirmReservation(reservation.cabañaId, reservation.id)} className={styles.button}>
                                     Confirmar
+                                </button>
+                                <button onClick={() => eliminarReserva(reservation.cabañaId, reservation.id)} className={styles.buttonEliminar}>
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>

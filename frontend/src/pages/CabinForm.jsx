@@ -1,13 +1,17 @@
 import 'animate.css/animate.min.css';
-import axios from 'axios';
+// import axios from 'axios';
+
+import axios from '../axios';
+
+
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 import styles from './CabinForm.module.css';
 
 
-// const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = import.meta.env.VITE_API_URL;
+// const url = "";
 
 
 export default function CabinForm(props) {
@@ -77,7 +81,7 @@ export default function CabinForm(props) {
         formData.append('capacidad', form.capacidad);
         formData.append('precio_por_noche', form.precio_por_noche);
         formData.append('file', form.imagen);
-
+        console.log("url ", url);
         if (edit) {
             handleEditCabin(formData);
         } else {

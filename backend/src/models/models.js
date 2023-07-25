@@ -96,6 +96,11 @@ const Reserva = sequelize.define("reserva", {
         allowNull: false,
         defaultValue: false,
     },
+    isUploadedComprobante: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
     fecha_inicio: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -132,6 +137,8 @@ sequelize
     .sync({ force: false })
     .then(() => {
         console.log("Conexión con la base de datos establecida");
+
+        require("../utils/eliminadorReservas");
     })
     .catch((error) => {
         console.error("Error al conectar con la base de datos:", error);

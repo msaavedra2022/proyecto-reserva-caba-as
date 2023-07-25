@@ -1,5 +1,9 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+
+const authMiddleware = require('../middlewares/authMiddleware');
+
 
 const router = express.Router();
 const multer = require('multer');
@@ -8,6 +12,9 @@ const Cabana = require('../models/models').Cabaña;
 const Reserva = require('../models/models').Reserva;
 
 const transporter = require('../utils/emailTransporter');
+
+const correo_sistem = 'miguel.saavedra1601@alumnos.ubiobio.cl';
+const correo_admin = 'miguel12y4@gmail.com';
 
 
 const storage = multer.diskStorage({
@@ -22,39 +29,45 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const correo_admin = 'miguel.saavedra1601@alumnos.ubiobio.cl';
-
-
 //El usuario debe subir el comprobante de pago de la reserva realizada previamente
-router.post('/upload-comprobante', upload.single('file'), (req, res) => {
+router.post('/upload-comprobante', upload.single('file'), async (req, res) => {
     const file = req.file;
     const filePath = file.path;
-    console.log(req.body);
     //recibir del body el id de la reserva
     const reservaId = req.body.reservaId;
+
+    console.log("reservaId: " + reservaId);
     
     //obtener la reserva
-    const reserva = Reserva.findByPk(reservaId);
+    const reserva = await Reserva.findByPk(reservaId);
+    if (!reserva || reserva.isUploadedComprobante) {
+        return res.status(400).json({ error: 'No existe la reserva' });
+    }
+
+    console.log("reserva: " + reserva);
     const email = reserva.email;
+    console.log("email: " + email);
 
     let mailOptions = {
-        from: correo_admin,
-        to: email,
+        from: correo_sistem,
+        to: correo_admin,
         subject: 'Comprobante de reserva',
         text: `Hola, el usuario ${reserva.nombre}, con email ${reserva.email} ha subido el comprobante de pago de la reserva ${reserva.id}`,
-        html: '<img src="cid:unique@kreata.ee"/>',
         attachments: [{
-            filename: 'image',
-            path: filePath,
-            cid: 'unique@kreata.ee' //same cid value as in the html img src
+            filename: file.originalname,
+            path: filePath            
         }]
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    console.log(mailOptions);
+
+    transporter.sendMail(mailOptions, async (error, info) => {
         if (error) {
             console.log(error);
             res.sendStatus(500);
         } else {
+            //asignar reserva.isConfirmedComprobante = true
+            await reserva.update({ isUploadedComprobante: true });
             console.log('Email sent: ' + info.response);
             fs.unlinkSync(filePath); // delete file after sending
             res.sendStatus(200);
@@ -88,7 +101,7 @@ router.get('/cabanas/:id', (req, res) => {
 });
 
 // Crear cabaña
-router.post('/cabanas', upload.any('file'), (req, res) => {
+router.post('/cabanas', upload.any('file'), authMiddleware, (req, res) => {
     const filename = req.file.filename;
     body = { ...req.body, imagen: filename, imagenes: [filename] };
     console.log(body);
@@ -98,7 +111,7 @@ router.post('/cabanas', upload.any('file'), (req, res) => {
 });
 
 // Add image to cabaña
-router.post('/cabanas/:id/images', upload.any('file'), (req, res) => {
+router.post('/cabanas/:id/images', authMiddleware, upload.any('file'), (req, res) => {
     const filename = req.file.filename;
     Cabana.findByPk(req.params.id)
         .then(cabana => {
@@ -110,7 +123,7 @@ router.post('/cabanas/:id/images', upload.any('file'), (req, res) => {
 });
 
 // Borrar imagen de cabaña
-router.delete('/cabanas/:id/images/:filename', (req, res) => {
+router.delete('/cabanas/:id/images/:filename', authMiddleware, (req, res) => {
     Cabana.findByPk(req.params.id)
         .then(cabana => {
             cabana.imagenes = cabana.imagenes.filter(imagen => imagen !== req.params.filename);
@@ -121,9 +134,13 @@ router.delete('/cabanas/:id/images/:filename', (req, res) => {
 });
 
 // Editar cabaña
-router.put('/cabanas/:id', (req, res) => {
+router.put('/cabanas/:id', authMiddleware, (req, res) => {
     const filename = req.file.filename;
-    body = { ...req.body, imagen: filename }
+    if (filename){
+        body = { ...req.body, imagen: filename }
+    } else {
+        body = { ...req.body }
+    }
 
     Cabana.update(body, { where: { id: req.params.id } })
         .then(() => res.json({ message: 'Cabaña actualizada con éxito' }))

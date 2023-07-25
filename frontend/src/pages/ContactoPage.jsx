@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../axios';
+
 import ContactForm from '../components/ContactForm';
 import styles from './ContactoPage.module.css';
 

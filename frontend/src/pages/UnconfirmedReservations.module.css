@@ -42,6 +42,18 @@
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin: 5px;
+}
+
+.buttonEliminar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: red;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 5px;
 }
 
 .button:hover {

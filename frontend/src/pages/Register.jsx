@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import styles from './Register.module.css';
 
 
-// const server = import.meta.env.VITE_API_URL;
+const server = import.meta.env.VITE_API_URL;
+// const server = "";
 
-const server = "";
 
 const Register = () => {
   const [username, setUsername] = useState('');

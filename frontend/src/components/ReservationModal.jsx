@@ -2,8 +2,15 @@ import React, { useEffect, useState } from 'react'
 import styles from './ReservationModal.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 
+// import axios from 'axios';
+import axios from '../axios';
+
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
+
 import Calendar from './Calendar';
 
+const url = import.meta.env.VITE_API_URL;
+// const url = "y"
 
 function ReservationModal({ onClose, onReserve, cabin }) {
 
@@ -21,7 +28,6 @@ function ReservationModal({ onClose, onReserve, cabin }) {
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [celular, setCelular] = useState('');
-    const [cantidadPersonas, setCantidadPersonas] = useState(0);
 
     const reservas = cabin.reservas;
 
@@ -30,7 +36,7 @@ function ReservationModal({ onClose, onReserve, cabin }) {
     }, [reservas]);
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         //sumar dias a la fecha de inicio
         const endDate = new Date(startDate);
@@ -43,11 +49,40 @@ function ReservationModal({ onClose, onReserve, cabin }) {
             nombre: nombre,
             email: email,
             celular: celular,
-            cantidad_personas: parseInt(cantidadPersonas)
         };
 
+        console.log("Verificando reserva...");
 
-        onReserve(cabin.id, obj);
+        // verficar que no se cruce con otra reserva en /cabanas/:id/verificarReservas
+        // axios.post(url + `/cabanas/${cabin.id}/verificarReservas`, obj)
+
+        const res = await axios.post(url + `/cabanas/${cabin.id}/verificarReservas`, obj)
+
+        console.log("res data", res.data);
+
+        if (res?.data?.disponible) {
+            // si no se cruza, reservar
+            
+            onReserve(cabin.id, obj);
+        } else {
+            if (res?.data?.disponible === false) {
+
+                // si se cruza, mostrar alerta
+                Swal.fire({
+                    title: 'Error al reservar',
+                    text: 'La cabaña ya está reservada en esas fechas',
+                    icon: 'error',
+                });
+            } else {
+                // si hay un error, mostrar alerta
+                Swal.fire({
+                    title: 'Error al reservar',
+                    text: 'Hubo un error al reservar la cabaña',
+                    icon: 'error',
+                });
+            }
+        }
+            
     };
 
     const handleStartDateChange = (event) => {
@@ -101,9 +136,6 @@ function ReservationModal({ onClose, onReserve, cabin }) {
                             <br />
                             <input type="number" id="dias" onChange={handleDaysChange} />
                             <br />
-                            <label htmlFor="cantidad">Cantidad de personas:</label>
-                            <br />
-                            <input type="number" id="cantidad" onChange={(e) => setCantidadPersonas(e.target.value)} />
                             <button type="submit">Reservar</button>
                             <button type="button" onClick={onClose}>Cancelar</button>
                         </form>

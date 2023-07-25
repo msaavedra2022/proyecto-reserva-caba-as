@@ -1,13 +1,15 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../axios';
+
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 
 // formData.append("id_reserva", reservaId);
-// const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = import.meta.env.VITE_API_URL;
+// const url = "";
 
 
 const Comprobante = () => {
@@ -20,6 +22,7 @@ const Comprobante = () => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("reservaId", reservaId);
+        console.log("reservaId", reservaId);
 
         console.log("Enviando archivo");
 

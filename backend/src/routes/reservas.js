@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const Sequelize = require("sequelize");
+const authMiddleware = require('../middlewares/authMiddleware');
+
 
 const Cabana = require('../models/models').Cabaña;
 const Reserva = require('../models/models').Reserva;
@@ -21,8 +24,11 @@ Correo electrónico: cabañaspucos@gmail.com
 
 `;
 
-//obtener url del backend
+//obtener url del backend (para correo)
 const url = "https://proyecto-reserva-cabanas-production-a736.up.railway.app"
+
+const correo_sistem = 'miguel.saavedra1601@alumnos.ubiobio.cl';
+const correo_admin = 'miguel12y4@gmail.com';
 
 // Obtener todas las cabañas que no tienen reservas confirmadas entre dos fechas
 router.post('/cabanas/disponibles', (req, res) => {
@@ -98,9 +104,64 @@ router.get('/reservasNoConfirmadas', (req, res) => {
     .catch(err => console.log(err));
 });
 
+// Verificar si una cabaña tiene reservas asociadas en un rango de fechas
+router.post('/cabanas/:id/verificarReservas', (req, res) => {
+    Cabana.findByPk(req.params.id)
+        .then(cabana => {
+            console.log("Backend verificar reservas");
+            cabana.getReservas({ where: { fecha_inicio: { [Sequelize.Op.lte]: req.body.fecha_fin }, fecha_fin: { [Sequelize.Op.gte]: req.body.fecha_inicio } } })
+                .then(reservas => {
+                    if (reservas.length == 0) {
+                        res.json({ disponible: true });
+                    } else {
+                        res.json({ disponible: false });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(400).json({ error: err.message })
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({ error: err.message })
+        });
+});
+
+//en el frontend la request debe quedar:
+const body = {
+    reservaId: 1,
+    fecha_inicio: "2021-06-01",
+    fecha_fin: "2021-06-02"
+}
+
+//Eliminar reserva cabanas/${idCabana}/reservas/${idReserva}`
+router.delete('/cabanas/:idCabana/reservas/:idReserva', authMiddleware, (req, res) => {
+    Cabana.findByPk(req.params.idCabana)
+        .then(cabana => {
+            cabana.getReservas({ where: { id: req.params.idReserva } })
+                .then(reservas => {
+                    reservas[0].destroy()
+                        .then(() => res.sendStatus(200))
+                        .catch(err => res.status(400).json({ error: err.message }));
+                })
+                .catch(err => res.status(400).json({ error: err.message }));
+        })
+        .catch(err => res.status(400).json({ error: err.message }));
+});
 
 
-const admin_correo = 'cabanaspuconphp@outlook.cl';
+
+
+//format fecha solo con dia mes y año
+const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    return `${day}/${month}/${year}`;
+}
+
 
 // Crear reserva (no confirmada)
 router.post('/cabanas/:id/reservas', (req, res) => {
@@ -118,17 +179,17 @@ router.post('/cabanas/:id/reservas', (req, res) => {
                     // Enviar email
                     // Configuración del mensaje de correo electrónico
                     const mailOptions = {
-                        from: admin_correo,
+                        from: correo_sistem,
                         to: req.body.email,
                         subject: 'Datos pago de reserva Cabañas Pucón',
                         text: `
 Hola ${req.body.nombre},\n\n
-Para confirmar tu reserva debes realizar un depósito de $${valor} a la siguiente cuenta:\n\n
+Para confirmar tu reserva debes realizar un depósito de $${valor} a la siguiente cuenta:\n
 ${datosReserva}
 
-Cuando realice el deposito de click en el siguiente link para enviar el comprobante su reserva:\n\n
-${url}/comprobante?id_reserva=${reserva.id}\n\n
-                        `
+Cuando realice el deposito de click en el siguiente link para enviar el comprobante su reserva:\n
+${url}/comprobante?id_reserva=${reserva.id}\n
+`
                     };
 
                     // Envío del correo electrónico
@@ -141,23 +202,19 @@ ${url}/comprobante?id_reserva=${reserva.id}\n\n
                             //Enviar email al admin
                             // Configuración del mensaje de correo electrónico
                             const mailOptionsAdmin = {
-                                from: admin_correo,
-                                to: "miguel12y4@gmail.com",
+                                from: correo_sistem,
+                                to: correo_admin,
                                 subject: 'Nueva reserva Cabañas Pucón',
                                 text: `Hola administrador,\n\n
 
-Se ha realizado una nueva reserva en la cabaña ${cabana.nombre}.\n\n
-Datos de la reserva:\n\n
-Nombre: ${req.body.nombre}\n\n
-Apellido: ${req.body.apellido}\n\n
-Email: ${req.body.email}\n\n
-Celular: ${req.body.celular}\n\n
-Fecha de inicio: ${req.body.fecha_inicio}\n\n
-Fecha de término: ${req.body.fecha_fin}\n\n
-Cantidad de personas: ${req.body.cantidad_personas}\n\n
-Valor: $${valor}\n\n
-                                `
-                            };
+Se ha realizado una nueva reserva en la cabaña ${cabana.nombre}.\n
+Datos de la reserva:\n
+Nombre: ${req.body.nombre}
+Email: ${req.body.email}
+Celular: ${req.body.celular}
+Fecha de inicio: ${formatDate(req.body.fecha_inicio)}
+Fecha de término: ${formatDate(req.body.fecha_fin)}
+Valor: $${valor}`};
                             
                             // Envío del correo electrónico
                             transporter.sendMail(mailOptionsAdmin, (error, info) => {
@@ -184,7 +241,7 @@ Valor: $${valor}\n\n
 });
 
 // Confirmar reserva TODO: Solo el admin puede hacer esto
-router.put('/cabanas/:id/reservas/:idReserva', (req, res) => {
+router.put('/cabanas/:id/reservas/:idReserva', authMiddleware, (req, res) => {
     Cabana.findByPk(req.params.id)
         .then(cabana => {
             cabana.getReservas({ where: { id: req.params.idReserva } })
@@ -198,13 +255,12 @@ router.put('/cabanas/:id/reservas/:idReserva', (req, res) => {
                                 to: reserva.email,
                                 subject: 'Reserva confirmada Cabañas Pucón',
                                 text: `La reserva de la cabaña ${cabana.nombre} ha sido confirmada.\n\n
-Datos de la reserva:\n\n
-Nombre: ${reserva.nombre}\n\n
-Email: ${reserva.email}\n\n
-Celular: ${reserva.celular}\n\n
-Fecha de inicio: ${reserva.fecha_inicio}\n\n
-Fecha de término: ${reserva.fecha_fin}\n\n
-Cantidad de personas: ${reserva.cantidad_personas}\n\n`
+Datos de la reserva:
+Nombre: ${reserva.nombre}
+Email: ${reserva.email}
+Celular: ${reserva.celular}
+Fecha de inicio: ${formatDate(reserva.fecha_inicio)}
+Fecha de término: ${formatDate(reserva.fecha_fin)}`
                             };
 
                             // Envío del correo electrónico
@@ -244,9 +300,6 @@ router.get('/cabanas/:id/disponible', (req, res) => {
         })
         .catch(err => res.status(400).json({ error: err.message }));
 });
-
-
-
 
 
 module.exports = router;
