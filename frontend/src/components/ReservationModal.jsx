@@ -9,8 +9,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 import Calendar from './Calendar';
 
-const url = import.meta.env.VITE_API_URL;
-// const url = "y"
+// const url = import.meta.env.VITE_API_URL;
+const url = ""
 
 function ReservationModal({ onClose, onReserve, cabin }) {
 

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import styles from './Login.module.css';
 
 
-const server = import.meta.env.VITE_API_URL;
-// const server = "";
+// const server = import.meta.env.VITE_API_URL;
+const server = "";
 
 
 const Login = () => {

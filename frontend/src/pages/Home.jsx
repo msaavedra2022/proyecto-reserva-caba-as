@@ -5,7 +5,8 @@ import CabinsPage from './CabinsPage';
 import styles from './Home.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const url = import.meta.env.VITE_API_URL;
+// const url = import.meta.env.VITE_API_URL;
+const url = '';
 
 function Home() {
   const [fecha, setFecha] = useState('');
