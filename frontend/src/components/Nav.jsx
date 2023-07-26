@@ -11,6 +11,12 @@ function Nav(props) {
     }
   }, []);
 
+  const handeCerrarSesion = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  }
+
   return (
     <nav className={styles.nav}>
       <ul className={styles.ul}>
@@ -19,7 +25,12 @@ function Nav(props) {
         {/* <li><a href="/opiniones">Información</a></li> */}
         {/*<li><a href="/preguntasfrecuentes" onClick={(e) => clickHandler(e, 'PreguntasFrecuentes')}>Preguntas Frecuentes</a></li>*/}
         <li><a href="/contacto">Contacto</a></li>
-        {isLogged ? <li><a href="/acerca">Administración</a></li> : <li><a href="/login">Iniciar Sesión</a></li>}
+        {isLogged ? 
+          <>
+            <li><a href="/acerca">Administración</a></li>
+            <li><a href='/' onClick={(event) => handeCerrarSesion(event)}>Cerrar Sesión</a></li>
+          </>
+        : <li><a href="/login">Iniciar Sesión</a></li>}
       </ul>
     </nav>
   );

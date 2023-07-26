@@ -10,7 +10,7 @@ router.post('/send-email', (req, res) => {
     // Configuración del mensaje de correo electrónico
     const mailOptions = {
         from: 'miguel.saavedra1601@alumnos.ubiobio.cl',
-        to: 'miguel12y4@gmail.com',
+        to: email,
         subject: 'Nuevo mensaje de bosque de pucón',
         text: `
             Nombre: ${name}\n

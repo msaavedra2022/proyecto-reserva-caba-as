@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 // import axios from 'axios';
 import axios from '../axios';
 
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
+
+
 import styles from './ContactForm.module.css';
 
 const Formulario = () => {
@@ -17,11 +20,22 @@ const Formulario = () => {
             .post('/send-email', { name, email, message })
             .then((response) => {
                 console.log(response.data);
-                setStatus('Éxito');
+                Swal.fire({
+                    title: "¡Mensaje enviado!",
+                    text: "El mensaje ha sido enviado exitosamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                });
+
             })
             .catch((error) => {
                 console.log(error);
-                setStatus('Error');
+                Swal.fire({
+                    title: "¡Error!",
+                    text: "Hubo un error al enviar el mensaje",
+                    icon: "error",
+                    confirmButtonText: "Aceptar",
+                });
             });
     };
 

@@ -270,6 +270,7 @@ Fecha de término: ${formatDate(reserva.fecha_fin)}`
                                     res.send('Error');
                                 } else {
                                     console.log('Correo electrónico enviado: ' + info.response);
+                                    res.json(reserva);
                                 }
                             });
                             //TODO: Enviar email al admin
