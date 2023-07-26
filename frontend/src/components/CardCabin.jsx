@@ -41,7 +41,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 //Card que muestra la cabaña
 
 // const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = "https://proyecto-reserva-cabanas-production-a736.up.railway.app";
 
 
 export default function cardCabin(props) {

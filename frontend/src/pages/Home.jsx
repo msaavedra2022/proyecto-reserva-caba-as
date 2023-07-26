@@ -6,7 +6,7 @@ import styles from './Home.module.css';
 import { AnimatePresence, motion } from 'framer-motion';
 
 // const url = import.meta.env.VITE_API_URL;
-const url = '';
+const url = 'https://proyecto-reserva-cabanas-production-a736.up.railway.app';
 
 function Home() {
   const [fecha, setFecha] = useState('');

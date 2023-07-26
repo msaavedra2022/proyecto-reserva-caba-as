@@ -7,7 +7,7 @@ import styles from './UnconfirmedReservations.module.css'; // Import the styles
 
 
 // const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = "https://proyecto-reserva-cabanas-production-a736.up.railway.app";
 
 const UnconfirmedReservations = () => {
     const [reservations, setReservations] = useState([]);

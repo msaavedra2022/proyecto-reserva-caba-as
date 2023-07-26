@@ -11,7 +11,7 @@ import styles from './CabinForm.module.css';
 
 
 // const url = import.meta.env.VITE_API_URL;
-const url = "";
+const url = "https://proyecto-reserva-cabanas-production-a736.up.railway.app";
 
 
 export default function CabinForm(props) {

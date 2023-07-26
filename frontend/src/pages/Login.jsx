@@ -4,7 +4,7 @@ import styles from './Login.module.css';
 
 
 // const server = import.meta.env.VITE_API_URL;
-const server = "";
+const server = "https://proyecto-reserva-cabanas-production-a736.up.railway.app";
 
 
 const Login = () => {
